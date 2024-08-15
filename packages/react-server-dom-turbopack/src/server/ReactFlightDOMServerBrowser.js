@@ -18,6 +18,8 @@ import {
   startFlowing,
   stopFlowing,
   abort,
+  suspend,
+  isDefaultAbortError,
 } from 'react-server/src/ReactFlightServer';
 
 import {
@@ -146,10 +148,20 @@ function prerender(
     if (options && options.signal) {
       const signal = options.signal;
       if (signal.aborted) {
-        abort(request, (signal: any).reason);
+        const reason = (signal: any).reason;
+        if (isDefaultAbortError(reason)) {
+          suspend(request);
+        } else {
+          abort(request, reason);
+        }
       } else {
         const listener = () => {
-          abort(request, (signal: any).reason);
+          const reason = (signal: any).reason;
+          if (isDefaultAbortError(reason)) {
+            suspend(request);
+          } else {
+            abort(request, reason);
+          }
           signal.removeEventListener('abort', listener);
         };
         signal.addEventListener('abort', listener);
