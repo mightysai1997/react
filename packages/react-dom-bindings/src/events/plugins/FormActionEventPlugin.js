@@ -105,7 +105,7 @@ function extractEvents(
       if (didCurrentEventScheduleTransition()) {
         // We're going to set the pending form status, but because the submission
         // was prevented, we should not fire the action function.
-        // $FlowExpectedError[extra-arg]: flow doesn't know about the 'submitter' parameter yet
+        // $FlowExpectedError[extra-arg]: flow <0.237.0 doesn't know about the 'submitter' parameter
         const formData = new FormData(form, submitter);
         const pendingState: FormStatus = {
           pending: true,
@@ -135,7 +135,7 @@ function extractEvents(
       event.preventDefault();
 
       // Dispatch the action and set a pending form status.
-      // $FlowExpectedError[extra-arg]: flow doesn't know about the 'submitter' parameter yet
+      // $FlowExpectedError[extra-arg]: flow <0.237.0 doesn't know about the 'submitter' parameter
       const formData = new FormData(form, submitter);
       const pendingState: FormStatus = {
         pending: true,
